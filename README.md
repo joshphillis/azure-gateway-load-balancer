@@ -1,61 +1,89 @@
 # Azure Gateway Load Balancer Deployment (Portal-Based)
 
-## 🧠 Overview
-This project demonstrates the creation of a Gateway Load Balancer in Microsoft Azure using the Azure Portal. It includes the setup of a virtual network, network security group, virtual machine, and load balancer with backend pools and health probes.
+# 🚦 Azure Gateway Load Balancer Lab — Multi-Tier Network Stack
 
-## ☁️ Technologies Used
-- Azure Portal
-- Azure Virtual Network (VNet)
-- Network Security Groups (NSG)
-- Azure Load Balancer (Gateway SKU)
-- Azure Bastion
-- Windows Server 2019 VM
-
-## 🚀 Implementation Steps
-
-### 1. Virtual Network & Subnet
-- Created a VNet named `whizVNet` with address space `10.1.0.0/16`.
-- Added a subnet `myBackendSubnet` with range `10.1.0.0/24`.
-
-### 2. Network Security Group
-- Created NSG `whizNSG` and added inbound/outbound rules to allow all traffic.
-- Associated NSG with the VM NIC.
-
-### 3. Azure Bastion
-- Enabled Azure Bastion for secure VM access without public IP exposure.
-
-### 4. Load Balancer (Gateway SKU)
-- Created `whizLoadBalancer-gw` with:
-  - Internal frontend IP
-  - Backend pool `whizBackendPool`
-  - Load balancing rule `whizLBRule`
-  - Health probe `whizHealthProbe` (TCP:80)
-
-### 5. Virtual Machine
-- Deployed `whizNVA` (Windows Server 2019) in `myBackendSubnet`.
-- Attached to backend pool and NSG.
-
-### 6. Validation
-- Used Great Learning Lab validation tool to confirm successful deployment.
-
-## 📸 Screenshots
-Include screenshots of:
-- VNet and subnet configuration
-- NSG rule setup
-- Load balancer frontend/backend config
-- VM deployment
-- Validation success
-
-## 🧠 Lessons Learned
-- Gained experience configuring Azure networking and load balancing.
-- Understood the role of Gateway Load Balancer in traffic redirection.
-- Practiced secure access using Azure Bastion.
-
-## 🧹 Resource Cleanup
-All resources were deleted after validation to avoid unnecessary charges.
+This lab demonstrates the creation and configuration of a **Gateway Load Balancer** using the Azure portal. It walks through deploying a segmented virtual network, configuring a public and internal load balancer, creating custom network security rules, and integrating an NVA (Network Virtual Appliance) into the backend pool.
 
 ---
 
-## 📌 Notes
-- This lab was completed as part of the Great Learning Azure certification program.
-- All credentials and sensitive data were rotated or removed post-lab.
+## 🎯 Objectives
+
+- Deploy Azure Virtual Network (`whizVNet`) with subnetting for backend tiers
+- Enable Azure Bastion for secure access via browser
+- Provision Network Security Group (`whizNSG`) with custom inbound/outbound rules
+- Create:
+  - Standard Load Balancer (`whizLoadBalancer`)
+  - Gateway Load Balancer (`whizLoadBalancer-gw`)
+- Configure frontend IPs, backend pools, and TCP health probes
+- Deploy a Windows Server NVA (`whizNVA`) and associate it with the gateway backend pool
+- Validate the environment and resource protection workflows
+
+---
+
+## 🧰 Core Components
+
+| Resource Type        | Name                    | Notes |
+|----------------------|-------------------------|-------|
+| VNet                 | `whizVNet`              | IP: 10.1.0.0, Subnet: `myBackendSubnet` |
+| Azure Bastion        | `myBastionIP`           | Secure browser-based RDP access |
+| NSG                  | `whizNSG`               | Custom rules for inbound/outbound traffic |
+| Load Balancer        | `whizLoadBalancer`      | Public-facing |
+| Gateway LB           | `whizLoadBalancer-gw`   | Internal, ties to backend pool |
+| NVA VM               | `whizNVA`               | Windows Server 2019, used in backend pool |
+| Health Probe         | `whizHealthProbe`       | TCP-based, default port 80 |
+
+---
+
+## 🔐 Security Highlights
+
+- NSG rules configured:
+  - Allow all inbound traffic (`whizNSGRule-AllowAll-All`)
+  - Allow outbound TCP traffic (`whizNSGRule-AllowAll-TCP-Out`)
+- Azure Bastion used for secure remote access
+- Boot diagnostics disabled to minimize exposure
+
+---
+
+## 🔁 Load Balancer Configuration
+
+- **Frontend IPs** for public access and gateway integration
+- **Backend Pools** configured for internal/external port mapping:
+  - Internal port: `10800`, ID: `800`
+  - External port: `10801`, ID: `801`
+- **Load Balancing Rule**:
+  - Frontend IP: `whizFrontEnd`
+  - Backend Pool: `whizBackendPool`
+  - Protocol: `TCP`, Session Persistence: `None`
+
+---
+
+## 🧪 Validation Steps
+
+- VM (`whizNVA`) added to the Gateway LB backend pool
+- Proper association verified via portal settings
+- Resource group cleanup initiated but halted due to lab constraints
+
+---
+
+## 🧠 Key Concepts Demonstrated
+
+- Gateway Load Balancer architecture in Azure
+- NSG configuration for traffic control
+- Subnet planning and segmentation
+- Public vs internal Load Balancer setup
+- Health probe and session configuration
+- VM attachment and backend pool integration
+
+---
+
+## 🔖 Recommended Tags
+
+`azure-networking` `gateway-load-balancer` `nsg` `virtual-network` `bastion` `windows-nva` `tcp-probe` `frontend-ip` `backend-pool` `cloud-lab`
+
+---
+
+## 🙌 Author
+
+**Joshua Phillis**  
+Cloud engineer focused on secure network architectures, Azure governance practices, and multi-cloud deployment labs.
+
